@@ -35,8 +35,11 @@ export default function TicketDetailPage() {
     <Background style={{ ...StyleSheet.absoluteFillObject, backgroundColor: bgColor }} />
     <View style={{ position: "absolute", top: 0, left: 0, backgroundColor: "#3fa1ae", padding: 4, height:"3%",width:"100%" }}/>
     <View style={{ position: "absolute", top: 0, left: 0, right: 0, alignItems: "center", zIndex: 1, padding: 20 }}>
-        <Text style={{ fontWeight: "bold", fontSize: 15, color: "#fff", top:21 ,left:0}}>╳                     Issue with ticket?     View all tickets</Text>
-        <Image source={require("../../assets/images/exclamation.png")} style={{ width: 30, height: 40, top: -10,left:-89,  zIndex: -1 }} />
+        <Text style={{ fontWeight: "bold", fontSize: 15, color: "#fff", top:21 ,left:0}}>                        Issue with ticket?     View all tickets</Text>
+        <Image source={require("../../assets/images/exclamation.png")} style={{ width: 30, height: 40, top: 33,left:70,  zIndex: -1 ,position:"absolute" }} />
+        <TouchableOpacity onPress={() => router.back("/index")} style={{ position: "absolute", left: 18, top: 44 }}>
+          <Image source={require("../../assets/images/close.png")} style={{ width: 12, height: 12, tintColor: "#fff" }} />
+        </TouchableOpacity>
     </View>
     <View style={[styles.ticketCard, { marginTop: 0 }]}>
         <View style={styles.headerBar}>
@@ -49,32 +52,32 @@ export default function TicketDetailPage() {
         <View style={styles.infoRow}>
           <Text style={{ fontSize:17,bottom:58,left:223, fontWeight:"light" }}>₹{ticket.price-ticket.price/100*10}.50</Text>
         </View>
-        <View style={{left:-113, bottom:50}}>
+        <View style={{left:16, bottom:310,position:"absolute"}}>
           <Text style={{ fontSize:14 }}>Bus Route</Text>
           <Text style={{ fontSize:17 }}>{ticket.roat_no}</Text>
         </View>
-        <View style={{left:118, bottom:94}}>
+        <View style={{left:253, bottom:313,position:"absolute"}}>
           <Text style={{ fontSize:14,textAlign:"right" }}>Fare</Text>
           <Text style={{fontWeight:"400", fontSize:17 }}>₹{ticket.price}.00</Text>
         </View>
-        <View style={{left:16, bottom:270 ,position:"absolute"}}>
+        <View style={{left:16, bottom:260 ,position:"absolute"}}>
           <Text style={{ fontSize:14 }}>Booking Time</Text>
           <Text style={{fontWeight:"400", fontSize:17 }}>{ticket.time}</Text>
         </View>
-        <View style={{left:258, bottom:270,position:"absolute"}}>
+        <View style={{left:258, bottom:260,position:"absolute"}}>
           <Text style={{ fontSize:14 }}>Tickets</Text>
           <Text style={{ fontSize:17,textAlign:"right" }}>{ticket.no_of_seats}</Text>
         </View>
-        <View style={{left:16, bottom:220,position:"absolute"}}>
+        <View style={{left:16, bottom:205,position:"absolute"}}>
           <Text style={{ fontSize:14 }}>Starting stop</Text>
           <Text style={{ fontSize:17 }}>{ticket.starting_point}</Text>
         </View>
         
-        <View style={{left:16, bottom:170, position:"absolute"}}>
+        <View style={{left:16, bottom:150, position:"absolute"}}>
           <Text style={{ fontSize:14 }}>Ending stop</Text>
           <Text style={{ fontSize:17 }}>{ticket.destination}</Text>
         </View>
-        <Text style={{ fontSize:14, bottom:130, textAlign:"center" , left:75, color:"#444444",position:"absolute" }}>T25082025658eadrc655</Text>
+        <Text style={{ fontSize:14, bottom:120, textAlign:"center" , left:75, color:"#444444",position:"absolute" }}>T25082025658eadrc655</Text>
 
         <TouchableOpacity style={styles.qrContainer} onPress={() => router.push(`/ticket_QR?id=${id}`)}>
           <Image source={require("../../assets/images/QR_code.png")} style={styles.qr} />
@@ -83,7 +86,7 @@ export default function TicketDetailPage() {
         <View style={{ position: "absolute", bottom: 10, left: 0, right: 0, alignItems: "center" }}>
           <View style={styles.networkContainer}>
           <Image source={require("../../assets/images/ONDC.png")} style={styles.ondcLogo} />
-          <Text style={{fontWeight:"bold",color:"#5f6160",fontSize:19}}>NETWORK</Text>
+          <Text style={{fontWeight:"bold",color:"#5f6160",fontSize:17.5}}>NETWORK</Text>
         </View>
         </View>
       </View>
@@ -114,8 +117,8 @@ const styles = StyleSheet.create({
   justifyContent: "center",
 },
 ondcLogo: {
-  width: 60,
-  height: 60,
+  width: 50,
+  height: 35,
   marginRight: 5,
   resizeMode: "contain",
 },
@@ -167,11 +170,11 @@ ondcLogo: {
     backgroundColor: "#daf2e4",
     /* boder detail QR */
     borderColor: "#2b9056ff",
-    borderWidth: 1,
+    borderWidth: 1.5,
     /* border radius */
-    height: 50,
+    height: 48,
     width: 280,
-    bottom: 70,
+    bottom: 63,
     position:"absolute",
     alignItems: "center",
     justifyContent: "center",
