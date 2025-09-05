@@ -3,6 +3,7 @@ import { Background } from "@react-navigation/elements";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import QRCode from 'react-native-qrcode-svg';
 
 export default function ticket_QR() {
   const { id } = useLocalSearchParams();
@@ -58,10 +59,10 @@ export default function ticket_QR() {
       
       <View style={styles.qrContainer}>
         <View style={styles.qrWrapper}>
-          <Image 
-            source={require("../assets/images/qrcode.png")} 
-            style={styles.qrCode} 
-          />
+      <QRCode
+         value={`Account Holder name:- PUNIT SHARMA\nAccount no:- "45281638152749251038373"\nPhone no:- 8130505020transaction ID:-T25082025658eadrc655"\nTicket ID: ${ticket.id}\nBUS no: ${ticket.name}\nRoute: ${ticket.roat_no}\nFare: ₹${ticket.price}.00\nBus Type: ${ticket.busType}\nDate: ${new Date(ticket.date).toLocaleString()}`}
+        size={300}
+      />
         </View>
       </View>
       <View style={styles.bottom} />
