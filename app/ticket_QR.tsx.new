@@ -18,7 +18,7 @@ type Ticket = {
   date?: string;
 };
 
-export default function TicketQrPage() {
+export default function ticket_QR() {
   const { id } = useLocalSearchParams();
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,6 @@ export default function TicketQrPage() {
         setLoading(false);
       }
     };
-
     loadTicket();
   }, [id]);
 
@@ -49,18 +48,15 @@ export default function TicketQrPage() {
   const bgColor = isElectricBus ? "#1bbabe" : isCngBus ? "#4da3ff" : isClusterBus ? "#918e8e" : "#f28526";
   const accentColor = isElectricBus ? "#0d8a8f" : isCngBus ? "#2f6fb8" : isClusterBus ? "#6b6d70" : "#c95f00";
   const cardBackground = isClusterBus ? "#f4f4f4" : "#ffffff";
-  const headerTextColor = isClusterBus ? "#f3f4f6" : "#ffffff";
-  const labelColor = isClusterBus ? "#4b5563" : "#2b9056";
-  const qrActionText = isClusterBus ? "Click to validate ticket" : "Show QR Code";
-
+  const textColor = isClusterBus ? "#f3f4f6" : "#111827";
   const qrValue = ticket
-    ? `Ticket ID: ${ticket.id}\nBus: ${ticket.name}\nRoute: ${ticket.roat_no}\nFare: ₹${ticket.price}.00\nSeats: ${ticket.no_of_seats}\nFrom: ${ticket.starting_point}\nTo: ${ticket.destination}\nTime: ${ticket.time}`
+    ? `Account Holder name:- PUNIT SHARMA\nAccount no:- "45281638152749251038373"\nPhone no:- 8130505020transaction ID:-T25082025658eadrc655"\nTicket ID: ${ticket.id}\nBUS no: ${ticket.name}\nRoute: ${ticket.roat_no}\nFare: ₹${ticket.price}.00\nBus Type: ${ticket.busType}\nDate: ${ticket.date ? new Date(ticket.date).toLocaleString() : ticket.time}`
     : "";
 
   if (loading) {
     return (
       <View style={[styles.screen, { backgroundColor: bgColor }]}> 
-        <Text style={{ color: headerTextColor }}>Loading ticket...</Text>
+        <Text style={{ color: textColor }}>Loading ticket...</Text>
       </View>
     );
   }
@@ -68,7 +64,7 @@ export default function TicketQrPage() {
   if (!ticket) {
     return (
       <View style={[styles.screen, { backgroundColor: bgColor }]}> 
-        <Text style={{ color: headerTextColor }}>Ticket not found.</Text>
+        <Text style={{ color: textColor }}>Ticket not found.</Text>
       </View>
     );
   }
@@ -78,14 +74,18 @@ export default function TicketQrPage() {
       <Background style={{ ...StyleSheet.absoluteFillObject, backgroundColor: bgColor }}>
         <View style={{ flex: 1 }} />
       </Background>
+      
       <View style={[styles.topBar, { backgroundColor: accentColor }]} />
-      <Text style={[styles.headerText, { color: headerTextColor }]}>╳                     Issue with ticket?     View all tickets</Text>
-      <Image source={require("../assets/images/exclamation.png")} style={styles.exclamationIcon} />
+      
+      <View style={styles.header}>
+        <Text style={[styles.headerText, { color: textColor }]}>╳                     Issue with ticket?     View all tickets</Text>
+        <Image source={require("../assets/images/exclamation.png")} style={styles.exclamationIcon} />
+      </View>
+      
       <View style={[styles.qrContainer, { backgroundColor: cardBackground, borderColor: accentColor }]}> 
         <View style={styles.qrWrapper}>
-          <QRCode value={qrValue} size={290} />
+          <QRCode value={qrValue} size={300} />
         </View>
-
       </View>
       <View style={styles.bottom} />
     </View>
@@ -111,15 +111,25 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    width: "100%",
-    height: "3%",
     backgroundColor: "#3fa1ae",
+    padding: 4,
+    height: "3%",
+    width: "100%",
+  },
+  header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    alignItems: "center",
+    zIndex: 1,
+    padding: 20,
   },
   headerText: {
     fontWeight: "bold",
     fontSize: 15,
     color: "#fff",
-    top: -90,
+    top: 21,
   },
   exclamationIcon: {
     width: 30,
@@ -147,11 +157,6 @@ const styles = StyleSheet.create({
   qrWrapper: {
     padding: 16,
     borderRadius: 12,
-    marginBottom: 12,
-  },
-  actionText: {
-    fontSize: 14,
-    fontWeight: "600",
-    marginTop: 4,
+    marginBottom: 16,
   },
 });

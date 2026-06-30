@@ -32,18 +32,32 @@ export default function TicketDetailPage() {
     loadTicket();
   }, [id]);
 
-  const bgColor =
-    ticket?.busType === "electric"
-      ? "#1bbabe"
-      : ticket?.busType === "cng"
-        ? "#4da3ff"
-        : ticket?.busType === "cluster"
-          ? "#918e8e"
-          : "#f28526";
-  const isClusterBus = ticket?.busType === "cluster";
+  const busType = ticket?.busType ?? "normal";
+  const isClusterBus = busType === "cluster";
+  const isElectricBus = busType === "electric";
+  const isCngBus = busType === "cng";
+  const bgColor = isElectricBus
+    ? "#1bbabe"
+    : isCngBus
+      ? "#4da3ff"
+      : isClusterBus
+        ? "#918e8e"
+        : "#f28526";
+  const accentColor = isElectricBus
+    ? "#0d8a8f"
+    : isCngBus
+      ? "#2f6fb8"
+      : isClusterBus
+        ? "#6b6d70"
+        : "#c95f00";
   const showValidationWarning = isClusterBus;
-  const ticketTextColor = isClusterBus ? "#58595b" : "#111827";
-  const ticketMutedTextColor = isClusterBus ? "#717375" : "#444444";
+  const ticketTextColor = isClusterBus ? "#707171" : "#111827";
+  const ticketMutedTextColor = isClusterBus ? "#69696a" : "#444444";
+  const qrButtonBackground = isClusterBus ? "#f5f7f4" : "#daf2e4";
+  const qrButtonTextColor = isClusterBus ? "#4b5b4c" : "#2b9056";
+  const qrButtonBorderColor = isClusterBus ? "#8ea28e" : "#2b9056";
+  const qrButtonLabel = isClusterBus ? "Click to validate ticket" : "Show QR Code";
+  const showQrIcon = !isClusterBus;
 
   if (!ticket) {
     return (
@@ -58,7 +72,7 @@ export default function TicketDetailPage() {
     <Background style={{ ...StyleSheet.absoluteFillObject, backgroundColor: bgColor }}>
       <View style={{ flex: 1 }} />
     </Background>
-    <View style={{ position: "absolute", top: 0, left: 0, backgroundColor: "#3fa1ae", padding: 4, height:"3%",width:"100%" }}/>
+    <View style={{ position: "absolute", top: 0, left: 0, backgroundColor: accentColor, padding: 4, height:"3%",width:"100%" }}/>
     <View style={{ position: "absolute", top: 0, left: 0, right: 0, alignItems: "center", zIndex: 1, padding: 20 }}>
         <Text style={{ fontWeight: "bold", fontSize: 15, color: "#fff", top:21 ,left:0}}>                        Issue with ticket?     View all tickets</Text>
         <Image source={require("../../assets/images/exclamation.png")} style={{ width: 30, height: 40, top: 33,left:70,  zIndex: -1 ,position:"absolute" }} />
@@ -118,9 +132,16 @@ export default function TicketDetailPage() {
         </View>
         <Text style={{ fontSize:14, bottom:120, textAlign:"center" , left:75, color: ticketMutedTextColor, position:"absolute" }}>T25082025658eadrc655</Text>
 
-        <TouchableOpacity style={styles.qrContainer} onPress={() => router.push(`/ticket_QR?id=${id}`)}>
-          <Image source={require("../../assets/images/QR_code.png")} style={styles.qr} />
-          <Text style={{ fontSize:14, color:"#2b9056ff", fontWeight:"500", marginRight: 10 }}>   Show QR Code</Text>
+        <TouchableOpacity
+          style={[styles.qrContainer, { backgroundColor: qrButtonBackground, borderColor: qrButtonBorderColor }]}
+          onPress={() => router.push(`/ticket_QR?id=${id}`)}
+        >
+          {showQrIcon ? (
+            <Image source={require("../../assets/images/QR_code.png")} style={styles.qr} />
+          ) : null}
+          <Text style={{ fontSize:14, color: qrButtonTextColor, fontWeight:"500", marginRight: 10 }}>
+            {qrButtonLabel}
+          </Text>
         </TouchableOpacity>
         <View style={{ position: "absolute", bottom: 10, left: 0, right: 0, alignItems: "center" }}>
           <View style={styles.networkContainer}>
@@ -214,10 +235,8 @@ ondcLogo: {
   qrContainer: {
     flexDirection: "row",
     backgroundColor: "#daf2e4",
-    /* boder detail QR */
     borderColor: "#2b9056ff",
     borderWidth: 1.5,
-    /* border radius */
     height: 48,
     width: 280,
     bottom: 63,
@@ -231,6 +250,8 @@ ondcLogo: {
     opacity: 0.8,
     width: 25,
     height: 25,
+    marginRight: 8,
+    color: "#2b9056ff",
   },
   footerText: {
     marginTop: 8,
