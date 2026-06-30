@@ -8,17 +8,18 @@
     "scheme": "chactr",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true,
-      "package": "Pu.nit22"
-    },
+"ios": {
+  "supportsTablet": true,
+  "bundleIdentifier": "com.punit22.chactr"
+},
+"android": {
+  "adaptiveIcon": {
+    "foregroundImage": "./assets/images/adaptive-icon.png",
+    "backgroundColor": "#ffffff"
+  },
+  "edgeToEdgeEnabled": true,
+  "package": "com.punit22.chactr"
+},
     "web": {
       "bundler": "metro",
       "output": "static",
