@@ -146,7 +146,7 @@ export default function TicketDetailPage() {
         <View style={{ position: "absolute", bottom: 10, left: 0, right: 0, alignItems: "center" }}>
           <View style={styles.networkContainer}>
           <Image source={require("../../assets/images/ONDC.png")} style={styles.ondcLogo} />
-          <Text style={{fontWeight:"bold",color:"#5f6160",fontSize:17.5}}>NETWORK</Text>
+          <Text style={styles.networkText}>NETWORK</Text>
         </View>
         </View>
       </View>
@@ -182,12 +182,17 @@ const styles = StyleSheet.create({
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "center",
-},
+  },
 ondcLogo: {
   width: 50,
   height: 35,
   marginRight: 5,
   resizeMode: "contain",
+},
+networkText: {
+  fontWeight:"bold",
+  color:"#4f5057",
+  fontSize:17.5
 },
   ticketCard: {
     top:-10,
@@ -212,7 +217,7 @@ ondcLogo: {
     marginBottom: 16,
   },
   headerText: {
-    color: "#000000ff",
+    color: "#2d2d36",
     fontWeight: "500",
     fontSize: 18,
   },
@@ -251,7 +256,7 @@ ondcLogo: {
     width: 25,
     height: 25,
     marginRight: 8,
-    color: "#2b9056ff",
+    tintColor: "#16885d",
   },
   footerText: {
     marginTop: 8,
@@ -277,7 +282,7 @@ ondcLogo: {
   line:{
     width: "90%",
     height: 1,
-    backgroundColor: "#000000ff",
+    backgroundColor: "#353540",
     top:10,
   }
 });

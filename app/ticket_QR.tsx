@@ -50,8 +50,6 @@ export default function TicketQrPage() {
   const accentColor = isElectricBus ? "#0d8a8f" : isCngBus ? "#2f6fb8" : isClusterBus ? "#6b6d70" : "#c95f00";
   const cardBackground = isClusterBus ? "#f4f4f4" : "#ffffff";
   const headerTextColor = isClusterBus ? "#f3f4f6" : "#ffffff";
-  const labelColor = isClusterBus ? "#4b5563" : "#2b9056";
-  const qrActionText = isClusterBus ? "Click to validate ticket" : "Show QR Code";
 
   const qrValue = ticket
     ? `Ticket ID: ${ticket.id}\nBus: ${ticket.name}\nRoute: ${ticket.roat_no}\nFare: ₹${ticket.price}.00\nSeats: ${ticket.no_of_seats}\nFrom: ${ticket.starting_point}\nTo: ${ticket.destination}\nTime: ${ticket.time}`
@@ -113,7 +111,6 @@ const styles = StyleSheet.create({
     left: 0,
     width: "100%",
     height: "3%",
-    backgroundColor: "#3fa1ae",
   },
   headerText: {
     fontWeight: "bold",
@@ -124,9 +121,9 @@ const styles = StyleSheet.create({
   exclamationIcon: {
     width: 30,
     height: 40,
-    top: -10,
-    left: -89,
-    zIndex: -1,
+    top: -120,
+    left: -90,
+    zIndex: 1,
   },
   qrContainer: {
     alignContent: "center",
@@ -141,6 +138,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     margin: 20,
+    top: -20,
     width: 320,
     height: 480,
   },
