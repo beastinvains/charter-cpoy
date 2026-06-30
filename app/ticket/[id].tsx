@@ -4,23 +4,46 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+type Ticket = {
+  id: string;
+  name: string;
+  price: number;
+  roat_no: string;
+  busType: string;
+  destination: string;
+  starting_point: string;
+  no_of_seats: string;
+  time: string;
+};
+
 export default function TicketDetailPage() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const [ticket, setTicket] = useState(null);
+  const [ticket, setTicket] = useState<Ticket | null>(null);
   useEffect(() => {
     const loadTicket = async () => {
       const saved = await AsyncStorage.getItem("tickets");
       if (saved) {
-        const tickets = JSON.parse(saved);
-        const found = tickets.find(t => t.id === id);
-        setTicket(found);
+        const tickets = JSON.parse(saved) as Ticket[];
+        const found = tickets.find((t: Ticket) => t.id === String(id));
+        setTicket(found ?? null);
       }
     };
     loadTicket();
   }, [id]);
 
-  const bgColor = ticket?.busType === "electric" ? "#1bbabe" : "#f28526";
+  const bgColor =
+    ticket?.busType === "electric"
+      ? "#1bbabe"
+      : ticket?.busType === "cng"
+        ? "#4da3ff"
+        : ticket?.busType === "cluster"
+          ? "#918e8e"
+          : "#f28526";
+  const isClusterBus = ticket?.busType === "cluster";
+  const showValidationWarning = isClusterBus;
+  const ticketTextColor = isClusterBus ? "#58595b" : "#111827";
+  const ticketMutedTextColor = isClusterBus ? "#717375" : "#444444";
 
   if (!ticket) {
     return (
@@ -32,52 +55,68 @@ export default function TicketDetailPage() {
 
   return (
     <View style={styles.screen}>
-    <Background style={{ ...StyleSheet.absoluteFillObject, backgroundColor: bgColor }} />
+    <Background style={{ ...StyleSheet.absoluteFillObject, backgroundColor: bgColor }}>
+      <View style={{ flex: 1 }} />
+    </Background>
     <View style={{ position: "absolute", top: 0, left: 0, backgroundColor: "#3fa1ae", padding: 4, height:"3%",width:"100%" }}/>
     <View style={{ position: "absolute", top: 0, left: 0, right: 0, alignItems: "center", zIndex: 1, padding: 20 }}>
         <Text style={{ fontWeight: "bold", fontSize: 15, color: "#fff", top:21 ,left:0}}>                        Issue with ticket?     View all tickets</Text>
         <Image source={require("../../assets/images/exclamation.png")} style={{ width: 30, height: 40, top: 33,left:70,  zIndex: -1 ,position:"absolute" }} />
-        <TouchableOpacity onPress={() => router.back("/index")} style={{ position: "absolute", left: 18, top: 44 }}>
+        <TouchableOpacity onPress={() => router.back()} style={{ position: "absolute", left: 18, top: 44 }}>
           <Image source={require("../../assets/images/close.png")} style={{ width: 12, height: 12, tintColor: "#fff" }} />
         </TouchableOpacity>
     </View>
     <View style={[styles.ticketCard, { marginTop: 0 }]}>
         <View style={styles.headerBar}>
-          <Text style={styles.headerText}>Transport Dept. of Delhi</Text>
+          <Text style={[styles.headerText, isClusterBus && { color: ticketTextColor }]}>Transport Dept. of Delhi</Text>
         </View>
-        <View style={styles.line}/>
+        <View style={[styles.line, isClusterBus && { backgroundColor: ticketTextColor }]}/>
         <View style={styles.infoRow}>
-          <Text style={{ fontSize:17,bottom:25,left:-16 }}>{ticket.name}</Text>
+          <Text style={{ fontSize:19,bottom:25,left:-16, color: ticketTextColor }}>{ticket.name}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={{ fontSize:17,bottom:58,left:223, fontWeight:"light" }}>₹{ticket.price-ticket.price/100*10}.50</Text>
+          <Text style={{ fontSize:19,bottom:58,left:215, fontWeight:"light", color: ticketTextColor }}>
+            ₹{(() => {
+              const bareFarePerSeat = Number(ticket.price || 0);
+              const seatCount = Number(ticket.no_of_seats || 1);
+
+              const seatDiscount = Number((bareFarePerSeat * 0.1).toFixed(2));
+              const seatSubtotal = bareFarePerSeat - seatDiscount;
+              const seatSurcharge = Number((bareFarePerSeat * 0.014).toFixed(2));
+              const seatCgst = Number((seatSurcharge * 0.18).toFixed(2));
+              const seatTotal = seatSubtotal + seatSurcharge + seatCgst;
+
+              const grandTotal = Number((seatTotal * seatCount).toFixed(2));
+              return grandTotal.toFixed(2);
+            })()}
+          </Text>
         </View>
-        <View style={{left:16, bottom:310,position:"absolute"}}>
-          <Text style={{ fontSize:14 }}>Bus Route</Text>
-          <Text style={{ fontSize:17 }}>{ticket.roat_no}</Text>
+        <View style={{left:16, bottom:313,position:"absolute"}}>
+          <Text style={{ fontSize:14, color: ticketMutedTextColor }}>Bus Route</Text>
+          <Text style={{ fontSize:17, color: ticketTextColor }}>{ticket.roat_no}</Text>
         </View>
-        <View style={{left:253, bottom:313,position:"absolute"}}>
-          <Text style={{ fontSize:14,textAlign:"right" }}>Fare</Text>
-          <Text style={{fontWeight:"400", fontSize:17 }}>₹{ticket.price}.00</Text>
+        <View style={{left:255, bottom:313,position:"absolute"}}>
+          <Text style={{ fontSize:14,textAlign:"right", color: ticketMutedTextColor }}>Fare</Text>
+          <Text style={{fontWeight:"500", fontSize:19, color: ticketTextColor }}>₹{ticket.price}.0</Text>
         </View>
         <View style={{left:16, bottom:260 ,position:"absolute"}}>
-          <Text style={{ fontSize:14 }}>Booking Time</Text>
-          <Text style={{fontWeight:"400", fontSize:17 }}>{ticket.time}</Text>
+          <Text style={{ fontSize:14, color: ticketMutedTextColor }}>Booking Time</Text>
+          <Text style={{fontWeight:"400", fontSize:17, color: ticketTextColor }}>{ticket.time}</Text>
         </View>
         <View style={{left:258, bottom:260,position:"absolute"}}>
-          <Text style={{ fontSize:14 }}>Tickets</Text>
-          <Text style={{ fontSize:17,textAlign:"right" }}>{ticket.no_of_seats}</Text>
+          <Text style={{ fontSize:14, color: ticketMutedTextColor }}>Tickets</Text>
+          <Text style={{ fontSize:17,textAlign:"right", color: ticketTextColor }}>{ticket.no_of_seats}</Text>
         </View>
         <View style={{left:16, bottom:205,position:"absolute"}}>
-          <Text style={{ fontSize:14 }}>Starting stop</Text>
-          <Text style={{ fontSize:17 }}>{ticket.starting_point}</Text>
+          <Text style={{ fontSize:14, color: ticketMutedTextColor }}>Starting stop</Text>
+          <Text style={{ fontSize:17, color: ticketTextColor }}>{ticket.starting_point}</Text>
         </View>
         
         <View style={{left:16, bottom:150, position:"absolute"}}>
-          <Text style={{ fontSize:14 }}>Ending stop</Text>
-          <Text style={{ fontSize:17 }}>{ticket.destination}</Text>
+          <Text style={{ fontSize:14, color: ticketMutedTextColor }}>Ending stop</Text>
+          <Text style={{ fontSize:17, color: ticketTextColor }}>{ticket.destination}</Text>
         </View>
-        <Text style={{ fontSize:14, bottom:120, textAlign:"center" , left:75, color:"#444444",position:"absolute" }}>T25082025658eadrc655</Text>
+        <Text style={{ fontSize:14, bottom:120, textAlign:"center" , left:75, color: ticketMutedTextColor, position:"absolute" }}>T25082025658eadrc655</Text>
 
         <TouchableOpacity style={styles.qrContainer} onPress={() => router.push(`/ticket_QR?id=${id}`)}>
           <Image source={require("../../assets/images/QR_code.png")} style={styles.qr} />
@@ -90,6 +129,13 @@ export default function TicketDetailPage() {
         </View>
         </View>
       </View>
+      {showValidationWarning ? (
+        <View style={styles.warningBox}>
+          <Text style={styles.warningText}>
+            Ticket must be validated within 30{"\n"}minutes, otherwise it will become invalid.
+          </Text>
+        </View>
+      ) : null}
       <View style={styles.bottom} />
     </View>
   );
@@ -191,6 +237,21 @@ ondcLogo: {
     color: "#888",
     fontSize: 14,
     textAlign: "center",
+  },
+  warningBox: {
+    marginTop: 12,
+    width: 320,
+    backgroundColor: "#fff4f4",
+
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  warningText: {
+    color: "#c20d0d",
+    fontSize: 14.5,
+    textAlign: "center",
+    fontWeight: "600",
   },
   line:{
     width: "90%",
