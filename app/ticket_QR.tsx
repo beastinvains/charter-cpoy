@@ -85,6 +85,11 @@ export default function TicketQrPage() {
         </View>
 
       </View>
+      {isClusterBus ? (
+        <View style={styles.validationStatusBox}>
+          <Text style={styles.validationStatus}>Validated At: {ticket.time}</Text>
+        </View>
+      ) : null}
       <View style={styles.bottom} />
     </View>
   );
@@ -146,6 +151,25 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
+  },
+  validationStatusBox: {
+    position: "absolute",
+    bottom: 90,
+    width: 290,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    borderColor: "#e0e0e0",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  validationStatus: {
+    color: "#c20d0d",
+    fontSize: 18,
+    textAlign: "center",
+    fontWeight: "500",
   },
   actionText: {
     fontSize: 14,

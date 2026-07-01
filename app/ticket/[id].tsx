@@ -51,13 +51,13 @@ export default function TicketDetailPage() {
         ? "#6b6d70"
         : "#c95f00";
   const showValidationWarning = isClusterBus;
-  const ticketTextColor = isClusterBus ? "#707171" : "#111827";
-  const ticketMutedTextColor = isClusterBus ? "#69696a" : "#444444";
+  const ticketTextColor = "#111827";
+  const ticketMutedTextColor = "#444444";
   const qrButtonBackground = isClusterBus ? "#f5f7f4" : "#daf2e4";
-  const qrButtonTextColor = isClusterBus ? "#4b5b4c" : "#2b9056";
-  const qrButtonBorderColor = isClusterBus ? "#8ea28e" : "#2b9056";
-  const qrButtonLabel = isClusterBus ? "Click to validate ticket" : "Show QR Code";
-  const showQrIcon = !isClusterBus;
+  const qrButtonTextColor = "#2b9056";
+  const qrButtonBorderColor = "#2b9056";
+  const qrButtonLabel = "Show QR Code";
+  const showQrIcon = isClusterBus;
 
   if (!ticket) {
     return (
@@ -153,7 +153,7 @@ export default function TicketDetailPage() {
       {showValidationWarning ? (
         <View style={styles.warningBox}>
           <Text style={styles.warningText}>
-            Ticket must be validated within 30{"\n"}minutes, otherwise it will become invalid.
+            Validated At: {ticket.time}
           </Text>
         </View>
       ) : null}
@@ -266,7 +266,7 @@ networkText: {
   },
   warningBox: {
     marginTop: 12,
-    width: 320,
+    width: 290,
     backgroundColor: "#fff4f4",
 
     borderRadius: 8,
@@ -275,7 +275,7 @@ networkText: {
   },
   warningText: {
     color: "#c20d0d",
-    fontSize: 14.5,
+    fontSize: 16,
     textAlign: "center",
     fontWeight: "600",
   },
